@@ -30,9 +30,10 @@ jobs:
         run: |
           export THEOS=/opt/theos
           mkdir -p $THEOS/sdks
-          wget -q --show-progress \
+          wget --show-progress \
             "https://github.com/theos/sdks/releases/download/v1/iPhoneOS13.7.sdk.tar.xz" \
             -O /tmp/sdk.tar.xz
+          ls -la /tmp/sdk.tar.xz
           tar -xf /tmp/sdk.tar.xz -C $THEOS/sdks
           rm -f /tmp/sdk.tar.xz
 
