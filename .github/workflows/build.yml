@@ -5,30 +5,25 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:  # 支持手动触发
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y git curl wget xz-utils build-essential openssh-client fakeroot libssl-dev zip unzip
-
       - name: Setup Theos
         run: |
-          export THEOS=/opt/theos
-          sudo git clone --recursive https://github.com/theos/theos.git $THEOS -q
-          sudo chown -R $(whoami):$(whoami) $THEOS
+          brew install dpkg ldid
+          export THEOS=~/theos
+          git clone --recursive https://github.com/theos/theos.git $THEOS
 
       - name: Setup iOS SDK
         run: |
-          export THEOS=/opt/theos
+          export THEOS=~/theos
           mkdir -p $THEOS/sdks
           git clone --depth 1 https://github.com/theos/sdks.git /tmp/theos-sdks
           cp -R /tmp/theos-sdks/*.sdk $THEOS/sdks/ || true
@@ -36,7 +31,7 @@ jobs:
 
       - name: Build Package
         env:
-          THEOS: /opt/theos
+          THEOS: ~/theos
         run: |
           make package FINALPACKAGE=1
 
