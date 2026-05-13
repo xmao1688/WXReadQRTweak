@@ -1,6 +1,6 @@
 export THEOS ?= /opt/theos
 export THEOS_MAKE_PATH = $(THEOS)/makefiles
-export TARGET = iphone:clang:13.7:13.0
+export TARGET = iphone:clang:14.5:13.0
 export ARCHS = arm64
 
 include $(THEOS_MAKE_PATH)/common.mk
