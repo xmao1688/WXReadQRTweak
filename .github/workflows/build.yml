@@ -1,0 +1,49 @@
+name: Build Tweak
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # 支持手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y git curl wget xz-utils build-essential openssh-client fakeroot ldid libssl-dev zip unzip
+
+      - name: Setup Theos
+        run: |
+          export THEOS=/opt/theos
+          sudo git clone --recursive https://github.com/theos/theos.git $THEOS -q
+          sudo chown -R $(whoami):$(whoami) $THEOS
+
+      - name: Setup iOS SDK
+        run: |
+          export THEOS=/opt/theos
+          mkdir -p $THEOS/sdks
+          wget -q --show-progress \
+            "https://github.com/theos/sdks/releases/download/v1/iPhoneOS13.7.sdk.tar.xz" \
+            -O /tmp/sdk.tar.xz
+          tar -xf /tmp/sdk.tar.xz -C $THEOS/sdks
+          rm -f /tmp/sdk.tar.xz
+
+      - name: Build Package
+        env:
+          THEOS: /opt/theos
+        run: |
+          make package FINALPACKAGE=1
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: WXReadQRTweak-DEB
+          path: packages/*.deb
