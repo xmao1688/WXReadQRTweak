@@ -29,7 +29,8 @@ static void showQRAlert(NSString *urlString) {
             actionWithTitle:@"关闭"
             style:UIAlertActionStyleCancel
             handler:nil]];
-        UIViewController *top = [UIApplication sharedApplication].keyWindow.rootViewController;
+        UIWindow *window = [UIApplication sharedApplication].windows.firstObject;
+        UIViewController *top = window.rootViewController;
         while (top.presentedViewController) top = top.presentedViewController;
         [top presentViewController:alert animated:YES completion:nil];
     });
