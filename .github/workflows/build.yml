@@ -18,7 +18,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y git curl wget xz-utils build-essential openssh-client fakeroot ldid libssl-dev zip unzip
+          sudo apt-get install -y git curl wget xz-utils build-essential openssh-client fakeroot libssl-dev zip unzip
 
       - name: Setup Theos
         run: |
